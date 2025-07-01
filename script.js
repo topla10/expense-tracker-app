@@ -3,13 +3,14 @@ const amount = document.querySelector('#amount');
 const category = document.querySelector('#category');
 const form = document.querySelector('form');
 const expenseList = document.querySelector('ul');
-const filterByCategory = document.querySelector('#filterCategory');
+const userFilter = document.querySelector('#filterCategory');
 const total = document.querySelector('#total');
 const filterBtn = document.querySelector('#filterBtn');
 
 const listItemArray = [];
 
 form.addEventListener('submit', handleInput);
+filterBtn.addEventListener('click', filterExpense);
 
 function handleInput(event) {
 	event.preventDefault();
@@ -26,12 +27,11 @@ function handleListItem() {
 }
 
 function createItem() {
-	const listItemObj = {
+	return {
 		description: description.value,
 		amount: parseFloat(amount.value),
 		category: category.value,
 	};
-	return listItemObj;
 }
 
 function addExpense(newItem) {
@@ -70,4 +70,13 @@ function totalCalc() {
 		totalPrice += i.amount;
 	}
 	total.innerHTML = totalPrice.toFixed(2);
+}
+
+function filterExpense() {
+	const newArray = listItemArray.filter((element) => {
+		if (userFilter.value === element.category) return true;
+		else if (userFilter.value === element.amount) return true;
+		else return false;
+	});
+	console.log(newArray);
 }
