@@ -75,7 +75,7 @@ function totalCalc() {
 function filterExpense() {
 	const newArray = listItemArray.filter((element) => {
 		if (userFilter.value === element.category) return true;
-		else if (userFilter.value === element.amount) return true;
+		else if (parseFloat(userFilter.value) === element.amount) return true;
 		else return false;
 	});
 	console.log(newArray);
