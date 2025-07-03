@@ -3,14 +3,12 @@ const amount = document.querySelector('#amount');
 const category = document.querySelector('#category');
 const form = document.querySelector('form');
 const expenseList = document.querySelector('ul');
-const userFilter = document.querySelector('#filterCategory');
 const total = document.querySelector('#total');
-const filterBtn = document.querySelector('#filterBtn');
+const filtering = document.querySelector('#filteringDiv');
 
 const listItemArray = [];
 
 form.addEventListener('submit', handleInput);
-filterBtn.addEventListener('click', filterExpense);
 
 function handleInput(event) {
 	event.preventDefault();
@@ -21,9 +19,14 @@ function handleInput(event) {
 
 function handleListItem() {
 	const newItem = createItem();
+
 	addExpense(newItem);
 	renderList(listItemArray);
 	totalCalc();
+
+	if (listItemArray.length === 2) {
+		filterSection();
+	}
 }
 
 function createItem() {
@@ -55,6 +58,14 @@ function renderList(arr) {
 		liElement.appendChild(spanElement);
 		liElement.appendChild(deleteBtn);
 		expenseList.appendChild(liElement);
+
+		// Hide or show the filtering section based on the length of the list
+		// Hide it when the list is reduced to less than 2 items
+		if (arr.length < 2 && filtering) {
+			filtering.style.display = 'none';
+		} else if (filtering) {
+			filtering.style.display = 'block';
+		}
 	});
 }
 const clearInput = function () {
@@ -63,6 +74,7 @@ const clearInput = function () {
 	amount.value = '';
 };
 
+// This function adds and display the total amount of the list items
 function totalCalc() {
 	let totalPrice = 0;
 
@@ -73,10 +85,28 @@ function totalCalc() {
 }
 
 function filterExpense() {
+	const userFilter = document.querySelector('#filterCategory');
+
 	const newArray = listItemArray.filter((element) => {
 		if (userFilter.value === element.category) return true;
 		else if (parseFloat(userFilter.value) === element.amount) return true;
 		else return false;
 	});
 	console.log(newArray);
+}
+
+function filterSection() {
+	const inputEl = document.createElement('input');
+	const userFilterBtn = document.createElement('button');
+	userFilterBtn.id = 'filterBtn';
+	userFilterBtn.textContent = 'Filter';
+
+	inputEl.type = 'text';
+	inputEl.id = 'filterCategory';
+	inputEl.placeholder = 'filter by category or amount';
+
+	filtering.appendChild(inputEl);
+	filtering.appendChild(userFilterBtn);
+
+	userFilterBtn.addEventListener('click', filterExpense);
 }
