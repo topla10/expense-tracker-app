@@ -58,15 +58,14 @@ function renderList(arr) {
 		liElement.appendChild(spanElement);
 		liElement.appendChild(deleteBtn);
 		expenseList.appendChild(liElement);
-
-		// Hide or show the filtering section based on the length of the list
-		// Hide it when the list is reduced to less than 2 items
-		if (arr.length < 2 && filtering) {
-			filtering.style.display = 'none';
-		} else if (filtering) {
-			filtering.style.display = 'block';
-		}
 	});
+	// Hide or show the filtering section based on the length of the list
+	// Hide it when the list is reduced to less than 2 items, show it othewise
+	if (arr.length < 2 && filtering) {
+		filtering.style.display = 'none';
+	} else if (filtering) {
+		filtering.style.display = 'block';
+	}
 }
 const clearInput = function () {
 	description.value = '';
@@ -96,6 +95,7 @@ function filterExpense() {
 }
 
 function filterSection() {
+	if (document.querySelector('#filterCategory')) return;
 	const inputEl = document.createElement('input');
 	const userFilterBtn = document.createElement('button');
 	userFilterBtn.id = 'filterBtn';
