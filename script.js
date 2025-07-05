@@ -22,7 +22,6 @@ function handleListItem() {
 
 	addExpense(newItem);
 	renderList(listItemArray);
-	totalCalc();
 
 	if (listItemArray.length === 2) {
 		filterSection();
@@ -43,6 +42,7 @@ function addExpense(newItem) {
 
 function renderList(arr) {
 	expenseList.innerHTML = '';
+
 	arr.forEach((element, index) => {
 		const liElement = document.createElement('li');
 		const spanElement = document.createElement('span');
@@ -50,15 +50,23 @@ function renderList(arr) {
 		deleteBtn.className = 'delete';
 		spanElement.textContent = `${element.description} (${element.category}): $${element.amount}`;
 		deleteBtn.textContent = 'delete';
+
 		deleteBtn.addEventListener('click', () => {
+			const realIndex = listItemArray.findIndex((el) => el === element);
+			listItemArray.splice(realIndex, 1);
 			arr.splice(index, 1);
+			console.log(listItemArray);
+			console.log(arr);
 			renderList(arr);
-			totalCalc();
+			totalCalc(arr);
 		});
+
 		liElement.appendChild(spanElement);
 		liElement.appendChild(deleteBtn);
 		expenseList.appendChild(liElement);
 	});
+
+	totalCalc(arr);
 	// Hide or show the filtering section based on the length of the list
 	// Hide it when the list is reduced to less than 2 items, show it othewise
 	if (arr.length < 2 && filtering) {
@@ -74,24 +82,28 @@ const clearInput = function () {
 };
 
 // This function adds and display the total amount of the list items
-function totalCalc() {
+function totalCalc(whateverArr) {
 	let totalPrice = 0;
 
-	for (const i of listItemArray) {
+	for (const i of whateverArr) {
 		totalPrice += i.amount;
 	}
 	total.innerHTML = totalPrice.toFixed(2);
 }
 
 function filterExpense() {
-	const userFilter = document.querySelector('#filterCategory');
+	let userFilter = document
+		.querySelector('#filterCategory')
+		.value.trim()
+		.toLowerCase();
 
-	const newArray = listItemArray.filter((element) => {
-		if (userFilter.value === element.category) return true;
-		else if (parseFloat(userFilter.value) === element.amount) return true;
+	const filteredArr = listItemArray.filter((element) => {
+		if (userFilter === element.category.toLowerCase()) return true;
+		else if (parseFloat(userFilter) === element.amount) return true;
 		else return false;
 	});
-	console.log(newArray);
+	//console.log(filteredArr);
+	renderList(filteredArr);
 }
 
 function filterSection() {
