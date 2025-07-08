@@ -5,10 +5,12 @@ const form = document.querySelector('form');
 const expenseList = document.querySelector('ul');
 const total = document.querySelector('#total');
 const filtering = document.querySelector('#filteringDiv');
+const message = document.querySelector('#message');
 
 const listItemArray = [];
 
 form.addEventListener('submit', handleInput);
+//message.style.display = 'none';
 
 function handleInput(event) {
 	event.preventDefault();
@@ -55,8 +57,6 @@ function renderList(arr) {
 			const realIndex = listItemArray.findIndex((el) => el === element);
 			listItemArray.splice(realIndex, 1);
 			arr.splice(index, 1);
-			console.log(listItemArray);
-			console.log(arr);
 			renderList(arr);
 			totalCalc(arr);
 		});
@@ -67,13 +67,6 @@ function renderList(arr) {
 	});
 
 	totalCalc(arr);
-	// Hide or show the filtering section based on the length of the list
-	// Hide it when the list is reduced to less than 2 items, show it othewise
-	if (arr.length < 2 && filtering) {
-		filtering.style.display = 'none';
-	} else if (filtering) {
-		filtering.style.display = 'block';
-	}
 }
 const clearInput = function () {
 	description.value = '';
@@ -103,7 +96,12 @@ function filterExpense() {
 		else return false;
 	});
 	//console.log(filteredArr);
-	renderList(filteredArr);
+	if (userFilter === '') {
+		renderList(listItemArray);
+	} else if (filteredArr.length === 0) {
+		message.style.display = 'inline';
+		message.innerHTML = 'Nothing to filter';
+	} else renderList(filteredArr);
 }
 
 function filterSection() {
@@ -121,4 +119,15 @@ function filterSection() {
 	filtering.appendChild(userFilterBtn);
 
 	userFilterBtn.addEventListener('click', filterExpense);
+	reset();
+}
+
+function reset() {
+	const resetBtn = document.createElement('button');
+	resetBtn.textContent = 'Reset';
+	filtering.appendChild(resetBtn);
+	resetBtn.addEventListener('click', () => {
+		message.style.display = 'none';
+		renderList(listItemArray);
+	});
 }

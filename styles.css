@@ -2,3 +2,7 @@
 	color: red;
 	margin-left: 5px;
 }
+#message {
+	font-style: italic;
+	color: red;
+}
