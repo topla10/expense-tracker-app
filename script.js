@@ -85,6 +85,8 @@ function totalCalc(whateverArr) {
 }
 
 function filterExpense() {
+	message.style.display = 'none';
+
 	let userFilter = document
 		.querySelector('#filterCategory')
 		.value.trim()
@@ -102,6 +104,7 @@ function filterExpense() {
 		message.style.display = 'inline';
 		message.innerHTML = 'Nothing to filter';
 	} else renderList(filteredArr);
+	document.querySelector('#filterCategory').value = '';
 }
 
 function filterSection() {
