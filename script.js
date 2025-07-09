@@ -51,7 +51,7 @@ function renderList(arr) {
 		const deleteBtn = document.createElement('button');
 		deleteBtn.className = 'delete';
 		spanElement.textContent = `${element.description} (${element.category}): $${element.amount}`;
-		deleteBtn.textContent = 'delete';
+		deleteBtn.textContent = 'Delete';
 
 		deleteBtn.addEventListener('click', () => {
 			const realIndex = listItemArray.findIndex((el) => el === element);
