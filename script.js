@@ -45,7 +45,7 @@ function addExpense(newItem) {
 function renderList(arr) {
 	expenseList.innerHTML = '';
 
-	arr.forEach((element, index) => {
+	arr.forEach((element) => {
 		const liElement = document.createElement('li');
 		const spanElement = document.createElement('span');
 		const deleteBtn = document.createElement('button');
@@ -54,11 +54,30 @@ function renderList(arr) {
 		deleteBtn.textContent = 'Delete';
 
 		deleteBtn.addEventListener('click', () => {
+			// Always remove the item from the master array
 			const realIndex = listItemArray.findIndex((el) => el === element);
 			listItemArray.splice(realIndex, 1);
-			arr.splice(index, 1);
-			renderList(arr);
-			totalCalc(arr);
+
+			// Re-check if a filter is currently applied
+			const filterInput = document.querySelector('#filterCategory');
+			const currentFilter = filterInput
+				? filterInput.value.trim().toLowerCase()
+				: '';
+
+			if (!currentFilter) {
+				// No filter: just re-render everything
+				renderList(listItemArray);
+			} else {
+				// Filter still active: re-filter and re-render the filtered result
+				const filteredArr = listItemArray.filter((el) => {
+					return (
+						el.category.toLowerCase() === currentFilter ||
+						el.amount === parseFloat(currentFilter)
+					);
+				});
+
+				renderList(filteredArr);
+			}
 		});
 
 		liElement.appendChild(spanElement);
